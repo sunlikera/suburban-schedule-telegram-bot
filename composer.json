@@ -1,0 +1,18 @@
+{
+    "name": "sunlikera/telegram_rasp_bot",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amosov Stas"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Api\\Rasp\\": "Api/Rasp"
+        }
+    }
+}
