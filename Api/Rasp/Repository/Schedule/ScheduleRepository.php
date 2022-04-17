@@ -6,6 +6,7 @@ namespace Api\Rasp\Repository\Schedule;
 
 use Api\Rasp\Repository\Schedule\Schedule\Schedule;
 use Api\Rasp\Repository\Schedule\Schedule\Factory;
+use Api\Rasp\Repository\Schedule\Exception\EmptyScheduleResponseException;
 use GuzzleHttp\Client;
 
 class ScheduleRepository
@@ -48,14 +49,18 @@ class ScheduleRepository
 
         //TODO: переделать на константы!
         if ($response->getStatusCode() !== 200) {
-            //кидать исключение
+            //TODO: залогировать
+            //TODO: кидать исключение
         }
 
         try {
             $rawData = $response->getBody()->getContents();
             $data = json_decode($rawData, true);
 
-            //TODO: обработка случая, когда пустой массив schedule
+            if (empty($data['schedule'])) {
+                //TODO: залогировать
+                throw new EmptyScheduleResponseException();
+            }
 
             return Factory::createCollection($data['schedule']);
         } catch (\Throwable $e) {

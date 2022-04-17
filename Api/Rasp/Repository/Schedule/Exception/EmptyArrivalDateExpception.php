@@ -8,5 +8,5 @@ use Exception;
 
 class EmptyArrivalDateExpception extends Exception
 {
-
+    protected $message = 'Пустое поле arrival';
 }
