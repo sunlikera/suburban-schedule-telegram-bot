@@ -5,8 +5,7 @@ declare (strict_types = 1);
 namespace Api\Rasp\Repository\Schedule;
 
 use Api\Rasp\Repository\Schedule\Schedule\Schedule;
-use Api\Rasp\Repository\Schedule\Schedule\DTO\Train;
-use Api\Rasp\Repository\Schedule\Exception\EmptyArrivalDateExpception;
+use Api\Rasp\Repository\Schedule\Schedule\Factory;
 use GuzzleHttp\Client;
 
 class ScheduleRepository
@@ -58,52 +57,7 @@ class ScheduleRepository
 
             //TODO: обработка случая, когда пустой массив schedule
 
-            return $this->hydrate($data['schedule']);
-        } catch (\Throwable $e) {
-            throw $e;
-        }
-    }
-
-    /**
-     * @param array $data
-     * @return Schedule
-     */
-    private function hydrate(array $data): Schedule
-    {
-        $schedule = new Schedule();
-
-        foreach ($data as $item) {
-            if ($train = $this->getTrain($item)) {
-                $schedule->add($train->getNumber(), $train);
-            }
-        }
-
-        return $schedule;
-    }
-
-    /**
-     * @param array $data
-     * @return Train|null
-     */
-    private function getTrain(array $data): ?Train
-    {
-        try {
-            if (empty($data['arrival'])) {
-                throw new EmptyArrivalDateExpception();
-            }
-
-            return new Train(
-                $data['arrival'],
-                $data['departure'],
-                (int)$data['thread']['number'],
-                $data['thread']['title'],
-                $data['thread']['short_title'],
-                $data['direction'],
-                $data['stops'],
-                $data['platform'],
-            );
-        } catch (EmptyArrivalDateExpception $emptyArrival) {
-            return null;
+            return Factory::createCollection($data['schedule']);
         } catch (\Throwable $e) {
             throw $e;
         }
