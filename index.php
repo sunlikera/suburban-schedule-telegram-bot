@@ -9,13 +9,16 @@ $config = require __DIR__ . '/config/config.php';
 
 use GuzzleHttp\Client;
 use Api\Rasp\Repository\Schedule\ScheduleRepository;
+use Api\Rasp\Repository\Search\SearchRepository;
 
 //TODO: DI
 $client = new Client(['base_uri' => 'https://api.rasp.yandex.net/v3.0/']);
 
 //TODO: Controller
-$repository = new ScheduleRepository($client, $config['api_key']);
+// $scheduleRepository = new ScheduleRepository($client, $config['api_key']);
+// $schedule = $scheduleRepository->getSchedule('s9600681');
 
-$schedule = $repository->getSchedule('s9600681');
+$searchRepository = new SearchRepository($client, $config['api_key']);
+$searchResult = $searchRepository->getSearchResult('s9600681', 's2000002');
 
-print_r($schedule);
+print_r($searchResult);
